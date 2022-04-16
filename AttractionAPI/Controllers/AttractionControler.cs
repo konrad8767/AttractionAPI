@@ -1,5 +1,6 @@
 ﻿using AttractionAPI.Entities;
 using AttractionAPI.Models;
+using AttractionAPI.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,11 @@ namespace AttractionAPI.Controllers
     [Route("api/attraction")]
     public class AttractionControler : ControllerBase
     {
-        private readonly AttractionDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IAttractionService _attractionService;
 
-        public AttractionControler(AttractionDbContext dbContext, IMapper mapper)
+        public AttractionControler(IAttractionService attractionService)
         {
-            this._dbContext = dbContext;
-            this._mapper = mapper;
+            this._attractionService = attractionService;
         }
 
         [HttpPost]
@@ -27,23 +26,16 @@ namespace AttractionAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var attraction = _mapper.Map<Attraction>(dto);
-            _dbContext.Attractions.Add(attraction);
-            _dbContext.SaveChanges();
+            
+            var attractionId = _attractionService.CreateAttraction(dto);
 
-            return Created($"/api/attraction/{attraction.Id}", null);
+            return Created($"/api/attraction/{attractionId}", null);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<AttractionDto>> GetAll()
         {
-            var attractions = this._dbContext
-                .Attractions
-                .Include(x => x.Address)
-                .Include(x => x.Comments)
-                .ToList();
-
-            var attractionsDtos = _mapper.Map<List<AttractionDto>>(attractions);
+            var attractionsDtos = _attractionService.GetAll();
 
             return Ok(attractionsDtos);
         }
@@ -51,18 +43,13 @@ namespace AttractionAPI.Controllers
         [HttpGet("{attractionid}")]
         public ActionResult<AttractionDto> Get([FromRoute]int attractionId)
         {
-            var attraction = _dbContext
-                .Attractions
-                .Include(x => x.Address)
-                .Include(x => x.Comments)
-                .FirstOrDefault(x => x.Id == attractionId);
+            var attractionDto = _attractionService.GetById(attractionId);
 
-            if (attraction is null)
+            if (attractionDto is null)
             {
                 return NotFound();
             }
 
-            var attractionDto = _mapper.Map<AttractionDto>(attraction);
             return Ok(attractionDto);
         }
     }
