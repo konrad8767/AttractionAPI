@@ -28,6 +28,7 @@ namespace AttractionAPI
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAttractionService, AttractionService>();
             services.AddScoped<ErrorHandlingMiddleware>();
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AttractionSeeder seeder)
@@ -42,6 +43,13 @@ namespace AttractionAPI
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Attraction API");
+            });
 
             app.UseRouting();
 
