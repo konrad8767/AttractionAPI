@@ -3,6 +3,7 @@ using AttractionAPI.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +23,18 @@ namespace AttractionAPI.Services
     {
         private readonly AttractionDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public AttractionService(AttractionDbContext dbContext, IMapper mapper)
+        public AttractionService(AttractionDbContext dbContext, IMapper mapper, ILogger<AttractionService> logger)
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
+            this._logger = logger;
         }
 
         public bool DeleteAttraction(int attractionId)
         {
+            _logger.LogWarning($"Attraction with id: {attractionId} DELETE action invoked.");
             var attraction = _dbContext
                 .Attractions
                 .FirstOrDefault(x => x.Id == attractionId);
