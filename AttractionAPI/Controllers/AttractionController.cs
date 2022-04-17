@@ -1,20 +1,17 @@
-﻿using AttractionAPI.Entities;
-using AttractionAPI.Models;
+﻿using AttractionAPI.Models;
 using AttractionAPI.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AttractionAPI.Controllers
 {
     [Route("api/attraction")]
-    public class AttractionControler : ControllerBase
+    [ApiController]
+    public class AttractionController : ControllerBase
     {
         private readonly IAttractionService _attractionService;
 
-        public AttractionControler(IAttractionService attractionService)
+        public AttractionController(IAttractionService attractionService)
         {
             this._attractionService = attractionService;
         }
@@ -22,11 +19,6 @@ namespace AttractionAPI.Controllers
         [HttpPut("{attractionId}")]
         public ActionResult UpdateAttraction([FromRoute] int attractionId, [FromBody] UpdateAttractionDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _attractionService.UpdateAttraction(attractionId, dto);
 
             return Ok();
@@ -43,11 +35,6 @@ namespace AttractionAPI.Controllers
         [HttpPost]
         public ActionResult CreateAttraction([FromBody] CreateAttractionDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var attractionId = _attractionService.CreateAttraction(dto);
 
             return Created($"/api/attraction/{attractionId}", null);
