@@ -1,4 +1,5 @@
 ﻿using AttractionAPI.Entities;
+using AttractionAPI.Exceptions;
 using AttractionAPI.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,8 @@ namespace AttractionAPI.Services
     public interface IAttractionService
     {
         int CreateAttraction(CreateAttractionDto dto);
-        bool DeleteAttraction(int attractionId);
-        bool UpdateAttraction(int attractionId, UpdateAttractionDto dto);
+        void DeleteAttraction(int attractionId);
+        void UpdateAttraction(int attractionId, UpdateAttractionDto dto);
         IEnumerable<AttractionDto> GetAll();
         AttractionDto GetById(int attractionId);
     }
@@ -32,7 +33,7 @@ namespace AttractionAPI.Services
             this._logger = logger;
         }
 
-        public bool DeleteAttraction(int attractionId)
+        public void DeleteAttraction(int attractionId)
         {
             _logger.LogWarning($"Attraction with id: {attractionId} DELETE action invoked.");
             var attraction = _dbContext
@@ -41,16 +42,14 @@ namespace AttractionAPI.Services
 
             if (attraction == null)
             {
-                return false;
+                throw new NotFoundException("Attraction not found.");
             }
 
             _dbContext.Attractions.Remove(attraction);
             _dbContext.SaveChanges();
-
-            return true;
         }
 
-        public bool UpdateAttraction(int attractionId, UpdateAttractionDto dto)
+        public void UpdateAttraction(int attractionId, UpdateAttractionDto dto)
         {
             var attraction = _dbContext
                 .Attractions
@@ -58,7 +57,7 @@ namespace AttractionAPI.Services
 
             if (attraction is null)
             {
-                return false;
+                throw new NotFoundException("Attraction not found.");
             }
 
             attraction.Name = dto.Name;
@@ -67,8 +66,6 @@ namespace AttractionAPI.Services
 
             _dbContext.Attractions.Update(attraction);
             _dbContext.SaveChanges();
-
-            return true;
         }
 
         public AttractionDto GetById(int attractionId)
@@ -81,7 +78,7 @@ namespace AttractionAPI.Services
 
             if (attraction is null)
             {
-                return null;
+                throw new NotFoundException("Attraction not found.");
             }
 
             var attractionDto = _mapper.Map<AttractionDto>(attraction);
