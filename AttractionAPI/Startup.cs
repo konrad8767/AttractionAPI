@@ -1,4 +1,5 @@
 using AttractionAPI.Entities;
+using AttractionAPI.Middleware;
 using AttractionAPI.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ namespace AttractionAPI
             services.AddScoped<AttractionSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAttractionService, AttractionService>();
+            services.AddScoped<ErrorHandlingMiddleware>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AttractionSeeder seeder)
@@ -36,6 +38,8 @@ namespace AttractionAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
