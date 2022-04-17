@@ -12,6 +12,8 @@ namespace AttractionAPI.Services
     public interface IAttractionService
     {
         int CreateAttraction(CreateAttractionDto dto);
+        bool DeleteAttraction(int attractionId);
+        bool UpdateAttraction(int attractionId, UpdateAttractionDto dto);
         IEnumerable<AttractionDto> GetAll();
         AttractionDto GetById(int attractionId);
     }
@@ -25,6 +27,44 @@ namespace AttractionAPI.Services
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
+        }
+
+        public bool DeleteAttraction(int attractionId)
+        {
+            var attraction = _dbContext
+                .Attractions
+                .FirstOrDefault(x => x.Id == attractionId);
+
+            if (attraction == null)
+            {
+                return false;
+            }
+
+            _dbContext.Attractions.Remove(attraction);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool UpdateAttraction(int attractionId, UpdateAttractionDto dto)
+        {
+            var attraction = _dbContext
+                .Attractions
+                .FirstOrDefault(x => x.Id == attractionId);
+
+            if (attraction is null)
+            {
+                return false;
+            }
+
+            attraction.Name = dto.Name;
+            attraction.Description = dto.Description;
+            attraction.Category = dto.Category;
+
+            _dbContext.Attractions.Update(attraction);
+            _dbContext.SaveChanges();
+
+            return true;
         }
 
         public AttractionDto GetById(int attractionId)

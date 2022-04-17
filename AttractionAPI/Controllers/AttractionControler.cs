@@ -19,6 +19,37 @@ namespace AttractionAPI.Controllers
             this._attractionService = attractionService;
         }
 
+        [HttpPut("{attractionId}")]
+        public ActionResult UpdateAttraction([FromRoute] int attractionId, [FromBody] UpdateAttractionDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isEdited = _attractionService.UpdateAttraction(attractionId, dto);
+
+            if (isEdited)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        [HttpDelete("{attractionId}")]
+        public ActionResult DeleteAttraction([FromRoute] int attractionId)
+        {
+            var isDeleted = _attractionService.DeleteAttraction(attractionId);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+            
+            return NotFound();
+        }
+
         [HttpPost]
         public ActionResult CreateAttraction([FromBody]CreateAttractionDto dto)
         {
