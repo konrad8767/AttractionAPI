@@ -28,6 +28,7 @@ namespace AttractionAPI
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAttractionService, AttractionService>();
             services.AddScoped<ErrorHandlingMiddleware>();
+            services.AddScoped<RequestTimeMiddleware>();
             services.AddSwaggerGen();
         }
 
@@ -41,6 +42,7 @@ namespace AttractionAPI
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestTimeMiddleware>();
 
             app.UseHttpsRedirection();
 
