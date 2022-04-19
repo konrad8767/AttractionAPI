@@ -9,6 +9,7 @@ namespace AttractionAPI.Services
     public interface ICommentService
     {
         int CreateComment(int attractionId, CreateCommentDto dto);
+        CommentDto GetById(int attractionId, int commentId);
     }
 
     public class CommentService : ICommentService
@@ -57,6 +58,23 @@ namespace AttractionAPI.Services
 
                 return commentEntity.Id;
             }
+        }
+
+        public CommentDto GetById(int attractionId, int commentId)
+        {
+            if (_context.Attractions.FirstOrDefault(x => x.Id == attractionId) is null)
+            {
+                throw new NotFoundException("Attraction not found.");
+            }
+
+            var comment = _context.Comments.FirstOrDefault(x => x.Id == commentId);
+            if (comment is null || comment.AttractionId != attractionId)
+            {
+                throw new NotFoundException("Attraction not found.");
+            }
+
+            var commentDto = _mapper.Map<CommentDto>(comment);
+            return commentDto;
         }
     }
 }

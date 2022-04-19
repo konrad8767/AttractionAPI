@@ -19,7 +19,14 @@ namespace AttractionAPI.Controllers
         {
             var newCommentId = _commentService.CreateComment(attractionId, dto);
 
-            return Created($"api/{attractionId}/comment/{newCommentId}", null);
+            return Created($"api/attraction/{attractionId}/comment/{newCommentId}", null);
+        }
+
+        [HttpGet("{commentId}")]
+        public ActionResult<CommentDto> Get([FromRoute] int attractionId, [FromRoute] int commentId)
+        {
+            CommentDto comment = _commentService.GetById(attractionId, commentId);
+            return Ok(comment);
         }
     }
 }
