@@ -1,6 +1,7 @@
 ﻿using AttractionAPI.Models;
 using AttractionAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AttractionAPI.Controllers
 {
@@ -27,6 +28,13 @@ namespace AttractionAPI.Controllers
         {
             CommentDto comment = _commentService.GetById(attractionId, commentId);
             return Ok(comment);
+        }
+
+        [HttpGet]
+        public ActionResult<List<CommentDto>> GetAll([FromRoute] int attractionId, [FromRoute] int commentId)
+        {
+            var comments = _commentService.GetAll(attractionId);
+            return Ok(comments);
         }
     }
 }

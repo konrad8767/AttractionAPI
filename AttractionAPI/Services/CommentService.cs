@@ -2,6 +2,8 @@
 using AttractionAPI.Exceptions;
 using AttractionAPI.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AttractionAPI.Services
@@ -10,6 +12,7 @@ namespace AttractionAPI.Services
     {
         int CreateComment(int attractionId, CreateCommentDto dto);
         CommentDto GetById(int attractionId, int commentId);
+        List<CommentDto> GetAll(int attractionId);
     }
 
     public class CommentService : ICommentService
@@ -75,6 +78,23 @@ namespace AttractionAPI.Services
 
             var commentDto = _mapper.Map<CommentDto>(comment);
             return commentDto;
+        }
+
+        public List<CommentDto> GetAll(int attractionId)
+        {
+            var attraction = _context
+                .Attractions
+                .Include(x => x.Comments)
+                .FirstOrDefault(x => x.Id == attractionId);
+
+            if (attraction is null)
+            {
+                throw new NotFoundException("Attraction not found.");
+            }
+
+            var commentDtos = _mapper.Map<List<CommentDto>>(attraction.Comments);
+            return commentDtos;
+
         }
     }
 }
