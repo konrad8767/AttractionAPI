@@ -13,6 +13,8 @@ namespace AttractionAPI.Services
         int CreateComment(int attractionId, CreateCommentDto dto);
         CommentDto GetById(int attractionId, int commentId);
         List<CommentDto> GetAll(int attractionId);
+        void Remove(int attractionId, int commentId);
+        void RemoveAll(int attractionId);
     }
 
     public class CommentService : ICommentService
@@ -27,8 +29,6 @@ namespace AttractionAPI.Services
 
         public int CreateComment(int attractionId, CreateCommentDto dto)
         {
-            //var attraction = _context.Attractions.FirstOrDefault(x => x.Id == attractionId);
-
             if (_context.Attractions.FirstOrDefault(x => x.Id == attractionId) is null)
             {
                 throw new NotFoundException("Attraction not found.");
@@ -82,6 +82,39 @@ namespace AttractionAPI.Services
 
         public List<CommentDto> GetAll(int attractionId)
         {
+            var attraction = GetAttractionById(attractionId);
+
+            var commentDtos = _mapper.Map<List<CommentDto>>(attraction.Comments);
+            return commentDtos;
+
+        }
+
+
+        public void Remove(int attractionId, int commentId)
+        {
+            var comment = _context
+                .Comments
+                .FirstOrDefault(x => x.Id == commentId);
+
+            if (comment == null || comment.AttractionId != attractionId)
+            {
+                throw new NotFoundException("Comment not found.");
+            }
+
+            _context.Comments.Remove(comment);
+            _context.SaveChanges();
+        }
+
+        public void RemoveAll(int attractionId)
+        {
+            var attraction = GetAttractionById(attractionId);
+
+            _context.Comments.RemoveRange(attraction.Comments);
+            _context.SaveChanges();
+        }
+
+        private Attraction GetAttractionById(int attractionId)
+        {
             var attraction = _context
                 .Attractions
                 .Include(x => x.Comments)
@@ -92,9 +125,7 @@ namespace AttractionAPI.Services
                 throw new NotFoundException("Attraction not found.");
             }
 
-            var commentDtos = _mapper.Map<List<CommentDto>>(attraction.Comments);
-            return commentDtos;
-
+            return attraction;
         }
     }
 }

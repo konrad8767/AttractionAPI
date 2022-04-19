@@ -2,10 +2,8 @@
 using AttractionAPI.Exceptions;
 using AttractionAPI.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

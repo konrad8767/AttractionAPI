@@ -36,5 +36,21 @@ namespace AttractionAPI.Controllers
             var comments = _commentService.GetAll(attractionId);
             return Ok(comments);
         }
+
+        [HttpDelete("{commentId}")]
+        public ActionResult Delete([FromRoute] int attractionId, [FromRoute] int commentId)
+        {
+            _commentService.Remove(attractionId, commentId);
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteAll([FromRoute] int attractionId)
+        {
+            _commentService.RemoveAll(attractionId);
+
+            return NoContent();
+        }
     }
 }
