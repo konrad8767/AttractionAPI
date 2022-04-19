@@ -50,7 +50,8 @@ namespace AttractionAPI
                         User = new User()
                         {
                             Name = "hellokitty888"
-                        }
+                        },
+                        UserName = "hellokitty888"
                     },
                     new Comment()
                     {
@@ -58,7 +59,8 @@ namespace AttractionAPI
                         User = new User()
                         {
                             Name = "kapitanBomba12"
-                        }
+                        },
+                        UserName = "kapitanBomba12"
                     }
                 }
             },
@@ -85,7 +87,8 @@ namespace AttractionAPI
                         User = new User()
                         {
                             Name = "dinoguy18"
-                        }
+                        },
+                        UserName = "dinoguy18"
                     },
                     new Comment()
                     {
@@ -93,7 +96,8 @@ namespace AttractionAPI
                         User = new User()
                         {
                             Name = "aManHasFallenIntoTheRiverInLegoCity"
-                        }
+                        },
+                        UserName = "aManHasFallenIntoTheRiverInLegoCity"
                     },
                     new Comment()
                     {
@@ -101,7 +105,8 @@ namespace AttractionAPI
                         User = new User()
                         {
                             Name = "marvelIsBoring2001"
-                        }
+                        },
+                        UserName = "marvelIsBoring2001"
                     }
                 }
             }

@@ -20,6 +20,11 @@ namespace AttractionAPI
             CreateMap<CreateAttractionDto, Attraction>()
                 .ForMember(x => x.Address, z => z.MapFrom(dto => new Address() 
                     { City = dto.City, Street = dto.Street, PostalCode = dto.PostalCode }));
+
+            CreateMap<CreateCommentDto, Comment>();
+
+            CreateMap<CreateUserDto, User>();
+
         }
     }
 }

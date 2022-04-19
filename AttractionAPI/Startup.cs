@@ -27,6 +27,7 @@ namespace AttractionAPI
             services.AddScoped<AttractionSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAttractionService, AttractionService>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddSwaggerGen();

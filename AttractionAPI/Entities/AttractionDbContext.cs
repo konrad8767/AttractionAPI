@@ -28,6 +28,16 @@ namespace AttractionAPI.Entities
                 .IsRequired()
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<Comment>()
+                .Property(x => x.Content)
+                .IsRequired()
+                .HasMaxLength(250);
+
+            modelBuilder.Entity<User>()
+                .Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
