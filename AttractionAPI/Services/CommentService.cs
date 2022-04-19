@@ -73,7 +73,7 @@ namespace AttractionAPI.Services
             var comment = _context.Comments.FirstOrDefault(x => x.Id == commentId);
             if (comment is null || comment.AttractionId != attractionId)
             {
-                throw new NotFoundException("Attraction not found.");
+                throw new NotFoundException("Comment not found.");
             }
 
             var commentDto = _mapper.Map<CommentDto>(comment);
