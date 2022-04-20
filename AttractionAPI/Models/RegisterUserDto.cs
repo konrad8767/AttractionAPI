@@ -12,6 +12,7 @@ namespace AttractionAPI.Models
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
+        public string ConfirmPassowrd { get; set; }
         public int RoleId { get; set; } = 1;
     }
 }

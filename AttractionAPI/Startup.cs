@@ -1,7 +1,11 @@
 using AttractionAPI.Entities;
 using AttractionAPI.Middleware;
+using AttractionAPI.Models;
+using AttractionAPI.Models.Validators;
 using AttractionAPI.Services;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +27,7 @@ namespace AttractionAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDbContext<AttractionDbContext>();
             services.AddScoped<AttractionSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
@@ -33,6 +37,7 @@ namespace AttractionAPI
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddSwaggerGen();
         }
 

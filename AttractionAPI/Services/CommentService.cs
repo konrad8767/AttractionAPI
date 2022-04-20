@@ -36,7 +36,7 @@ namespace AttractionAPI.Services
 
             var existingUser = _context.Users.FirstOrDefault(x => x.Name == dto.UserName);
 
-            if (existingUser is null)
+            if (existingUser is null) // fixme
             {
                 var newCreatedUser = new CreateUserDto() { Name = dto.UserName };
                 var newUser = _mapper.Map<User>(newCreatedUser);
