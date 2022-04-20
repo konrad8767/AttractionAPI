@@ -27,6 +27,7 @@ namespace AttractionAPI.Controllers
         }
 
         [HttpDelete("{attractionId}")]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult DeleteAttraction([FromRoute] int attractionId)
         {
             _attractionService.DeleteAttraction(attractionId);
@@ -35,6 +36,7 @@ namespace AttractionAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateAttraction([FromBody] CreateAttractionDto dto)
         {
             var attractionId = _attractionService.CreateAttraction(dto);
