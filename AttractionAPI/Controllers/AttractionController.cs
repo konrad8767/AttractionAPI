@@ -1,5 +1,6 @@
 ﻿using AttractionAPI.Models;
 using AttractionAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace AttractionAPI.Controllers
 {
     [Route("api/attraction")]
     [ApiController]
+    [Authorize]
     public class AttractionController : ControllerBase
     {
         private readonly IAttractionService _attractionService;
@@ -49,6 +51,7 @@ namespace AttractionAPI.Controllers
         }
 
         [HttpGet("{attractionid}")]
+        [AllowAnonymous]
         public ActionResult<AttractionDto> Get([FromRoute] int attractionId)
         {
             var attractionDto = _attractionService.GetById(attractionId);
