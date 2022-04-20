@@ -16,6 +16,13 @@ namespace AttractionAPI
         {
             if (_dbContext.Database.CanConnect())
             {
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
+
                 if (!_dbContext.Attractions.Any())
                 {
                     var attractions = GetAttractions();
@@ -23,6 +30,27 @@ namespace AttractionAPI
                     _dbContext.SaveChanges();
                 }
             }
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "User"
+                },
+                new Role()
+                {
+                    Name = "Manager"
+                },
+                new Role()
+                {
+                    Name = "Admin"
+                }
+            };
+
+            return roles;
         }
 
         private IEnumerable<Attraction> GetAttractions()
@@ -49,16 +77,20 @@ namespace AttractionAPI
                         Content = "Nice place. Really liked it!",
                         User = new User()
                         {
-                            Name = "hellokitty888"
+                            Name = "hellokitty888",
+                            Email = "lnannini3@cafepress.com",
+                            Role = _dbContext.Roles.FirstOrDefault(x => x.Name == "User")
                         },
-                        UserName = "hellokitty888"
+                        UserName = "hellokitty888",
                     },
                     new Comment()
                     {
                         Content = "Very boring place, wouldn't recommend.",
                         User = new User()
                         {
-                            Name = "kapitanBomba12"
+                            Name = "kapitanBomba12",
+                            Email = "macius2004@op.pl",
+                            Role = _dbContext.Roles.FirstOrDefault(x => x.Name == "User")
                         },
                         UserName = "kapitanBomba12"
                     }
@@ -86,16 +118,20 @@ namespace AttractionAPI
                         Content = "❤️ So big, so many artworks, everything is really interesting and beautifull",
                         User = new User()
                         {
-                            Name = "dinoguy18"
+                            Name = "dinoguy18",
+                            Email = "hbauman1@adobe.com",
+                            Role = _dbContext.Roles.FirstOrDefault(x => x.Name == "User")
                         },
-                        UserName = "dinoguy18"
+                        UserName = "dinoguy18",
                     },
                     new Comment()
                     {
                         Content = "Excellent medieval works and unique Nubian wall paintings.",
                         User = new User()
                         {
-                            Name = "aManHasFallenIntoTheRiverInLegoCity"
+                            Name = "aManHasFallenIntoTheRiverInLegoCity",
+                            Email = "phughesdon0@arstechnica.com",
+                            Role = _dbContext.Roles.FirstOrDefault(x => x.Name == "User")
                         },
                         UserName = "aManHasFallenIntoTheRiverInLegoCity"
                     },
@@ -104,7 +140,9 @@ namespace AttractionAPI
                         Content = "On Tuesday is for free, awesome place and awesome art.",
                         User = new User()
                         {
-                            Name = "marvelIsBoring2001"
+                            Name = "marvelIsBoring2001",
+                            Email = "blaraway2@t-online.de",
+                            Role = _dbContext.Roles.FirstOrDefault(x => x.Name == "User")
                         },
                         UserName = "marvelIsBoring2001"
                     }

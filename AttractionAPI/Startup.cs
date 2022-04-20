@@ -4,6 +4,7 @@ using AttractionAPI.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,8 +29,10 @@ namespace AttractionAPI
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IAttractionService, AttractionService>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddSwaggerGen();
         }
 

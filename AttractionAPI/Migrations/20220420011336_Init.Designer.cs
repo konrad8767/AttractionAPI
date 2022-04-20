@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttractionAPI.Migrations
 {
     [DbContext(typeof(AttractionDbContext))]
-    [Migration("20220419140945_Init")]
+    [Migration("20220420011336_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,7 +110,7 @@ namespace AttractionAPI.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("AttractionAPI.Entities.User", b =>
+            modelBuilder.Entity("AttractionAPI.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,10 +119,38 @@ namespace AttractionAPI.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("AttractionAPI.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -155,6 +183,17 @@ namespace AttractionAPI.Migrations
                     b.Navigation("Attraction");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AttractionAPI.Entities.User", b =>
+                {
+                    b.HasOne("AttractionAPI.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("AttractionAPI.Entities.Address", b =>

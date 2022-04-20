@@ -10,6 +10,7 @@ namespace AttractionAPI.Entities
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,14 @@ namespace AttractionAPI.Entities
                 .Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            modelBuilder.Entity<User>()
+                .Property(x => x.Email)
+                .IsRequired();
+
+            modelBuilder.Entity<Role>()
+                .Property(x => x.Name)
+                .IsRequired();
 
         }
 
